@@ -1,5 +1,6 @@
 import time
 import requests
+import argparse
 from collections import namedtuple
 from typing import List, Tuple, Iterator, Dict
 
@@ -121,10 +122,15 @@ def scrape_district_ids(url: str) -> Dict[str, str]:
 
 
 def main():
-    district_ids = scrape_district_ids('https://suumo.jp/chintai/tokyo/city/')
+    parser = argparse.ArgumentParser(description='Scraping rental rooms from suumo.')
+    parser.add_argument('area', help='scraping in this area.')
+    args = parser.parse_args()
+
+    area_url = f'https://suumo.jp/chintai/{args.area}/city/'
+    district_ids = scrape_district_ids(area_url)
     base_url = 'https://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&cb=0.0&ct=9999999&et=9999999&cn=9999999&mb=0&mt=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&fw2='
 
-    id_stack = [list(district_ids.items())[-5]]
+    id_stack = list(district_ids.items())
     pbar = tqdm(total=len(id_stack), position=1, desc='All progress')
     while id_stack:
         d, Id = id_stack.pop(0)

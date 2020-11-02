@@ -137,7 +137,7 @@ def main():
         try:
             data = scrape_pages(base_url + f'&sc={Id}', d)
             df = pd.DataFrame(data=data)
-            df.to_csv(f'data/suumo_{d}.csv')
+            df.to_csv(f'../data/raw/suumo_{d}.csv')
             pbar.update(1)
         except:
             id_stack.append((d, Id))
